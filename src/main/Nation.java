@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public enum Nation {
+    NULL        (-1, "NULL"),
     ITALIA      (0, "Italia"),
     FRANCIA     (1, "Francia"),
     SPAGNA      (2, "Spagna"),

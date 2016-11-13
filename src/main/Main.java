@@ -1,7 +1,16 @@
 package main;
 
+import static main.Nation.*;
+
 public class Main {
+    static AdminWindow a;
+
     public static void main(String[] args) {
-        System.out.println("Ciao");
+        a = new AdminWindow();
+        a.validate();
+    }
+
+    public static void updateWindow() {
+        a.updateContext();
     }
 }

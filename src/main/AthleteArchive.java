@@ -11,15 +11,18 @@ public class AthleteArchive {
     public AthleteArchive(String filepath, int capacity) throws IOException {
         this.capacity = capacity;
         file = new RandomAccessFile(filepath, "rw");
-        if(new File(filepath).canRead())
+        if(new File(filepath).isFile())
             return;
 
         Athlete a = new Athlete();
-        for(int i = 0; i < capacity; i++)
+        for(int i = 0; i < capacity; i++) {
+            file.writeBoolean(false);
             Athlete.write(file, a);
+        }
     }
 
     public void write(Athlete athlete) throws IOException {
+        file.writeBoolean(true);
         Athlete.write(file, athlete);
     }
 
@@ -27,21 +30,56 @@ public class AthleteArchive {
         if(position >= capacity)
             throw new IOException();
 
-        long offset = position * Athlete.SIZE;
+        long offset = position * (Athlete.SIZE + 1);
         file.seek(offset);
+        file.writeBoolean(true);
         Athlete.write(file, athlete);
     }
 
     public Athlete read() throws IOException {
-        return Athlete.read(file);
+        if(file.readBoolean())
+            return Athlete.read(file);
+        else
+            return null;
     }
 
     public Athlete read(int position) throws IOException {
         if(position >= capacity)
             throw new IOException();
 
-        long offset = position * Athlete.SIZE;
+        long offset = position * (Athlete.SIZE + 1);
         file.seek(offset);
-        return Athlete.read(file);
+
+        if(file.readBoolean())
+            return Athlete.read(file);
+        else
+            return null;
     }
+
+    public void delete() throws IOException {
+        file.writeBoolean(false);
+    }
+
+    public void delete(int position) throws IOException {
+        if(position >= capacity)
+            throw new IOException();
+
+        long offset = position * (Athlete.SIZE + 1);
+        file.seek(offset);
+        file.writeBoolean(false);
+    }
+
+    public void restore() throws IOException {
+        file.writeBoolean(true);
+    }
+
+    public void restore(int position) throws IOException {
+        if(position >= capacity)
+            throw new IOException();
+
+        long offset = position * (Athlete.SIZE + 1);
+        file.seek(offset);
+        file.writeBoolean(true);
+    }
+
 }
