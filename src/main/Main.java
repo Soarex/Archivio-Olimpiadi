@@ -1,7 +1,5 @@
 package main;
 
-import static main.Nation.*;
-
 public class Main {
     static AdminWindow a;
 

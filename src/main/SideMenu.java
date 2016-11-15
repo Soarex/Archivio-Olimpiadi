@@ -15,7 +15,7 @@ public class SideMenu extends JPanel {
         WideButton button2 = new WideButton("Cerca");
 
         button.setSelected(true);
-        button.setIcon(new ImageIcon("users.png"));
+        button.setIcon(new ImageIcon("res/system/users.png"));
         button.addActionListener((ActionEvent e) -> {
             button.setSelected(true);
             button2.setSelected(false);
@@ -24,7 +24,7 @@ public class SideMenu extends JPanel {
         });
         add(button);
 
-        button2.setIcon(new ImageIcon("search.png"));
+        button2.setIcon(new ImageIcon("res/system/search.png"));
         button2.addActionListener((ActionEvent e) -> {
             button2.setSelected(true);
             button.setSelected(false);
