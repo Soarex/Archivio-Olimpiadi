@@ -3,15 +3,21 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 public class AthleteArchive {
     private RandomAccessFile file;
+    private AthleteNameIndexFile nameIndex;
+    private AthleteNationIndexFile nationIndex;
     private int capacity;
 
-    public AthleteArchive(String filepath, int capacity) throws IOException {
+    public AthleteArchive(int capacity) throws IOException {
         this.capacity = capacity;
-        file = new RandomAccessFile(filepath, "rw");
-        if(new File(filepath).isFile())
+        file = new RandomAccessFile("data/athletes1.dat", "rw");
+        nameIndex = new AthleteNameIndexFile();
+        nationIndex = new AthleteNationIndexFile();
+
+        if(new File("data/athletes.dat").isFile())
             return;
 
         Athlete a = new Athlete();
@@ -22,18 +28,18 @@ public class AthleteArchive {
     }
 
     public void write(Athlete athlete) throws IOException {
-        file.writeBoolean(true);
-        Athlete.write(file, athlete);
-    }
-
-    public void write(Athlete athlete, int position) throws IOException {
-        if(position >= capacity)
+        if(athlete.id >= capacity)
             throw new IOException();
 
-        long offset = position * (Athlete.SIZE + 1);
+
+        long offset = athlete.id * (Athlete.SIZE + 1);
         file.seek(offset);
         file.writeBoolean(true);
         Athlete.write(file, athlete);
+
+        nameIndex.add(new AthleteNameIndex(athlete.name + athlete.surname, athlete.id));
+        nationIndex.add(new AthleteNationIndex(athlete.nation, athlete.id));
+
     }
 
     public Athlete read() throws IOException {
@@ -80,6 +86,24 @@ public class AthleteArchive {
         long offset = position * (Athlete.SIZE + 1);
         file.seek(offset);
         file.writeBoolean(true);
+    }
+
+    public Athlete[] search(String fullname) throws IOException {
+        Short[] arr = nameIndex.search(fullname);
+        ArrayList<Athlete> list = new ArrayList<>();
+        for(Short s : arr)
+            list.add(read(s));
+
+        return list.toArray(new Athlete[0]);
+    }
+
+    public Athlete[] search(Nation nation) throws IOException {
+        Short[] arr = nationIndex.search(nation);
+        ArrayList<Athlete> list = new ArrayList<>();
+        for(Short s : arr)
+            list.add(read(s));
+
+        return list.toArray(new Athlete[0]);
     }
 
 }

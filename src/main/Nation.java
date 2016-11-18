@@ -29,6 +29,10 @@ public enum Nation {
         return name;
     }
 
+    public boolean equals(Nation n) {
+        return n.id == id;
+    }
+
     public static void write(RandomAccessFile file, Nation nation) throws IOException {
         file.writeInt(nation.getId());
     }

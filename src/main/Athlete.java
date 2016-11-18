@@ -12,10 +12,11 @@ public class Athlete {
         nation = Nation.NULL;
     }
 
-    public Athlete(String name, String surname, Nation nation) {
+    public Athlete(String name, String surname, Nation nation, int id) {
         this.name = name;
         this.surname = surname;
         this.nation = nation;
+        this.id = (short)id;
     }
 
     public String toString() {
