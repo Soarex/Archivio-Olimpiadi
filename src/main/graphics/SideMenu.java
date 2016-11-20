@@ -1,4 +1,7 @@
-package main;
+package main.graphics;
+
+import main.Main;
+import main.core.Application;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +23,7 @@ public class SideMenu extends JPanel {
             button.setSelected(true);
             button2.setSelected(false);
             currentContext = new AthleteContext();
-            Main.updateWindow();
+            Application.updateWindow();
         });
         add(button);
 
@@ -29,7 +32,7 @@ public class SideMenu extends JPanel {
             button2.setSelected(true);
             button.setSelected(false);
             currentContext = new SearchContext();
-            Main.updateWindow();
+            Application.updateWindow();
         });
         add(button2);
     }

@@ -1,4 +1,4 @@
-package main;
+package main.archive;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,19 +7,21 @@ import java.util.ArrayList;
 
 public class AthleteArchive {
     private RandomAccessFile file;
-    private AthleteNameIndexFile nameIndex;
-    private AthleteNationIndexFile nationIndex;
+    private IndexFile nameIndex;
+    private IndexFile nationIndex;
     private int capacity;
 
     public AthleteArchive(int capacity) throws IOException {
         this.capacity = capacity;
-        file = new RandomAccessFile("data/athletes1.dat", "rw");
-        nameIndex = new AthleteNameIndexFile();
-        nationIndex = new AthleteNationIndexFile();
+        nameIndex = new IndexFile("data/athletes_name.ndx", new NameIndex());
+        nationIndex = new IndexFile("data/athletes_nation.ndx", new NationIndex());
 
-        if(new File("data/athletes.dat").isFile())
+        if(new File("data/athletes.dat").isFile()) {
+            file = new RandomAccessFile("data/athletes.dat", "rw");
             return;
+        }
 
+        file = new RandomAccessFile("data/athletes.dat", "rw");
         Athlete a = new Athlete();
         for(int i = 0; i < capacity; i++) {
             file.writeBoolean(false);
@@ -27,7 +29,7 @@ public class AthleteArchive {
         }
     }
 
-    public void write(Athlete athlete) throws IOException {
+    public void write(Athlete athlete) throws IOException, IllegalAccessException, InstantiationException {
         if(athlete.id >= capacity)
             throw new IOException();
 
@@ -37,8 +39,8 @@ public class AthleteArchive {
         file.writeBoolean(true);
         Athlete.write(file, athlete);
 
-        nameIndex.add(new AthleteNameIndex(athlete.name + athlete.surname, athlete.id));
-        nationIndex.add(new AthleteNationIndex(athlete.nation, athlete.id));
+        nameIndex.add(new NameIndex(athlete.name + athlete.surname, athlete.id));
+        nationIndex.add(new NationIndex(athlete.nation, athlete.id));
 
     }
 
@@ -88,7 +90,7 @@ public class AthleteArchive {
         file.writeBoolean(true);
     }
 
-    public Athlete[] search(String fullname) throws IOException {
+    public Athlete[] search(String fullname) throws IOException, IllegalAccessException, InstantiationException {
         Short[] arr = nameIndex.search(fullname);
         ArrayList<Athlete> list = new ArrayList<>();
         for(Short s : arr)
@@ -97,7 +99,7 @@ public class AthleteArchive {
         return list.toArray(new Athlete[0]);
     }
 
-    public Athlete[] search(Nation nation) throws IOException {
+    public Athlete[] search(Nation nation) throws IOException, IllegalAccessException, InstantiationException {
         Short[] arr = nationIndex.search(nation);
         ArrayList<Athlete> list = new ArrayList<>();
         for(Short s : arr)

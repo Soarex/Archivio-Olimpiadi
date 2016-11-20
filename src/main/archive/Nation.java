@@ -1,9 +1,9 @@
-package main;
+package main.archive;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public enum Nation {
+public enum Nation implements Comparable<Nation> {
     NULL        (-1, "NULL"),
     ITALIA      (0, "Italia"),
     FRANCIA     (1, "Francia"),
@@ -39,7 +39,7 @@ public enum Nation {
 
     public static Nation read(RandomAccessFile file) throws IOException {
         Nation[] v = values();
-        return v[file.readInt()];
+        return v[file.readInt() + 1];
     }
 }
 

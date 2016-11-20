@@ -1,4 +1,4 @@
-package main;
+package main.archive;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -20,7 +20,7 @@ public class Athlete {
     }
 
     public String toString() {
-        return name + " " + surname + " " + nation + " " + id;
+        return name + " " + surname + " " + nation.getName() + " " + id;
     }
 
     public static final int NAME_LENGHT = 25;
