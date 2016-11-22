@@ -7,13 +7,13 @@ public class Competition {
     public Discipline discipline;
     public float score;
     public short athleteId;
-    public int id;
+    public short id;
 
     public Competition() {
-
+        discipline = Discipline.NULL;
     }
 
-    public Competition(Discipline discipline, short athleteId, float score) {
+    public Competition(Discipline discipline, short athleteId, float score, short id) {
         this.athleteId = athleteId;
         this.discipline = discipline;
         this.score = score;
@@ -37,7 +37,7 @@ public class Competition {
         res.discipline = Discipline.read(file);
         res.score = file.readShort();
         res.athleteId = file.readShort();
-        res.id = file.readInt();
+        res.id = file.readShort();
         return res;
     }
 }

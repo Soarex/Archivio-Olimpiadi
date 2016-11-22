@@ -3,7 +3,7 @@ package main.archive;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public enum Discipline {
+public enum Discipline implements Comparable<Discipline> {
     NULL            (-1, "NULL"),
     METRI_100       (0, "100 Metri"),
     METRI_200       (1, "200 Metri"),
@@ -29,8 +29,8 @@ public enum Discipline {
         return name;
     }
 
-    public static void write(RandomAccessFile file, Discipline nation) throws IOException {
-        file.writeInt(nation.getId());
+    public static void write(RandomAccessFile file, Discipline discipline) throws IOException {
+        file.writeInt(discipline.getId());
     }
 
     public static Discipline read(RandomAccessFile file) throws IOException {

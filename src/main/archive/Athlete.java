@@ -2,34 +2,45 @@ package main.archive;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Athlete {
     public String name, surname;
+    public Date date;
     public short id;
     public Nation nation;
 
     public Athlete() {
         nation = Nation.NULL;
+        date = new Date();
     }
 
-    public Athlete(String name, String surname, Nation nation, int id) {
+    public Athlete(String name, String surname, Nation nation, Date date, int id) {
         this.name = name;
         this.surname = surname;
         this.nation = nation;
+        this.date = date;
         this.id = (short)id;
     }
 
     public String toString() {
-        return name + " " + surname + " " + nation.getName() + " " + id;
+        return name + " " + surname + " " + nation.getName() + " " + date.getDay() + "/" + date.getMonth() + "/" + date.getYear() + " " + id;
+    }
+
+    public String getDate() {
+        return date.getDay() + "/" + date.getMonth() + "/" + date.getYear();
     }
 
     public static final int NAME_LENGHT = 25;
     public static final int NAME_SIZE = NAME_LENGHT * 2;
-    public static final int SIZE = NAME_SIZE * 2 + 2 + 4;
+    public static final int SIZE = NAME_SIZE * 2 + 2 + 4 + 4 + 4 + 4;
 
     public static void write(RandomAccessFile file, Athlete athlete) throws IOException {
         writeName(file, athlete.name);
         writeName(file, athlete.surname);
+        writeDate(file, athlete.date);
         file.writeShort(athlete.id);
         Nation.write(file, athlete.nation);
     }
@@ -41,10 +52,17 @@ public class Athlete {
         file.writeChars(buffer.toString());
     }
 
+    private static void writeDate(RandomAccessFile file, Date date) throws IOException {
+        file.writeInt(date.getYear());
+        file.writeInt(date.getMonth());
+        file.writeInt(date.getDay());
+    }
+
     public static Athlete read(RandomAccessFile file) throws IOException {
         Athlete res = new Athlete();
         res.name = readName(file);
         res.surname = readName(file);
+        res.date = readDate(file);
         res.id = file.readShort();
         res.nation = Nation.read(file);
         return res;
@@ -58,5 +76,13 @@ public class Athlete {
         String res = new String(buffer);
         res = res.replaceAll("\0", "");
         return res;
+    }
+
+    private static Date readDate(RandomAccessFile file) throws IOException {
+        Date date = new Date();
+        date.setYear(file.readInt());
+        date.setMonth(file.readInt());
+        date.setDate(file.readInt());
+        return date;
     }
 }

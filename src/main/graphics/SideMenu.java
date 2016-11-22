@@ -1,6 +1,5 @@
 package main.graphics;
 
-import main.Main;
 import main.core.Application;
 
 import java.awt.*;
@@ -12,10 +11,10 @@ public class SideMenu extends JPanel {
 
     public SideMenu() {
         super();
-        setBackground(new Color(0x181818));
+        setBackground(StandardColor.BACKGROUND_DARK_COLOR);
 
         WideButton button = new WideButton("Atleti");
-        WideButton button2 = new WideButton("Cerca");
+        WideButton button2 = new WideButton("Gare");
 
         button.setSelected(true);
         button.setIcon(new ImageIcon("res/system/users.png"));
@@ -27,11 +26,11 @@ public class SideMenu extends JPanel {
         });
         add(button);
 
-        button2.setIcon(new ImageIcon("res/system/search.png"));
+        button2.setIcon(new ImageIcon("res/system/document.png"));
         button2.addActionListener((ActionEvent e) -> {
             button2.setSelected(true);
             button.setSelected(false);
-            currentContext = new SearchContext();
+            currentContext = new CompetitionContext();
             Application.updateWindow();
         });
         add(button2);
@@ -49,7 +48,5 @@ public class SideMenu extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-
     }
 }

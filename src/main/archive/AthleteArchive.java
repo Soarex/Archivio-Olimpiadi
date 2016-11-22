@@ -108,4 +108,13 @@ public class AthleteArchive {
         return list.toArray(new Athlete[0]);
     }
 
+    public Athlete[] get(int l, int r) throws IOException, IllegalAccessException, InstantiationException {
+        Short[] arr = nationIndex.get(l, r);
+        ArrayList<Athlete> list = new ArrayList<>();
+        for(Short s : arr)
+            list.add(read(s));
+
+        return list.toArray(new Athlete[0]);
+    }
+
 }

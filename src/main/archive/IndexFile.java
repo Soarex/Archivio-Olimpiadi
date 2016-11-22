@@ -17,6 +17,7 @@ public class IndexFile {
         }
 
         file = new RandomAccessFile(path, "rw");
+        file.writeInt(entryCount);
         this.type = type;
     }
 
@@ -71,6 +72,10 @@ public class IndexFile {
         shift(aus, ++position);
     }
 
+    public void remove(int pointer) throws IOException, IllegalAccessException, InstantiationException {
+
+    }
+
     public <T extends Comparable<T>> Short[] search(T key) throws IOException, IllegalAccessException, InstantiationException  {
         ArrayList<Short> res = new ArrayList<>();
 
@@ -101,11 +106,13 @@ public class IndexFile {
             }
 
             do {
-                position++;
-                file.seek(position * type.getSize() + 4);
-                aus.read(file);
-                if(aus.key.equals(key))
-                    res.add(aus.pointer);
+                if(position < r) {
+                    position++;
+                    file.seek(position * type.getSize() + 4);
+                    aus.read(file);
+                    if (aus.key.equals(key))
+                        res.add(aus.pointer);
+                }
             } while (aus.key.equals(key) && position < r);
             return;
         }
@@ -113,6 +120,20 @@ public class IndexFile {
         if(aus.key.compareTo(key) > 0) search(key, res, l, position - 1);
 
         if(aus.key.compareTo(key) < 0) search(key, res, position + 1, r);
+    }
+
+    public Short[] get(int l, int r) throws IOException, IllegalAccessException, InstantiationException {
+        ArrayList<Short> list = new ArrayList<>();
+
+        while(l < entryCount && l < r) {
+            file.seek(l * type.getSize() + 4);
+            Index<?> aus = type.getClass().newInstance();
+            aus.read(file);
+            list.add(aus.pointer);
+            l++;
+        }
+
+        return list.toArray(new Short[0]);
     }
 
 }

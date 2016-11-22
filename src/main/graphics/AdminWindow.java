@@ -9,7 +9,7 @@ public class AdminWindow extends JFrame{
 
     public AdminWindow() {
         super("Admin window");
-        setSize(800, 600);
+        setSize(1280, 720);
         setResizable(true);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);

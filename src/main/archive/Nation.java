@@ -29,6 +29,11 @@ public enum Nation implements Comparable<Nation> {
         return name;
     }
 
+    public static Nation get(int id) {
+        Nation[] v = values();
+        return v[id + 1];
+    }
+
     public boolean equals(Nation n) {
         return n.id == id;
     }
