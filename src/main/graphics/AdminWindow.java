@@ -12,7 +12,7 @@ public class AdminWindow extends JFrame{
         setSize(1280, 720);
         setResizable(true);
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         contentPane = getContentPane();
         sideMenu = new SideMenu();
@@ -24,6 +24,14 @@ public class AdminWindow extends JFrame{
     public void updateContext() {
         contentPane.removeAll();
         add(sideMenu, BorderLayout.WEST);
+        add(sideMenu.getSelectedContext(), BorderLayout.CENTER);
+        validate();
+    }
+
+    public void updateContext(JPanel context) {
+        contentPane.removeAll();
+        add(sideMenu, BorderLayout.WEST);
+        sideMenu.setCurrentContext(context);
         add(sideMenu.getSelectedContext(), BorderLayout.CENTER);
         validate();
     }

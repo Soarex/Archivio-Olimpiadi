@@ -2,6 +2,7 @@ package main.core;
 
 import main.archive.*;
 import main.graphics.AdminWindow;
+import main.graphics.AthleteCardContext;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ public class Application {
     private static AdminWindow window;
     private static AthleteArchive athleteArchive;
     private static CompetitionArchive competitionArchive;
+    private static short id = 0;
 
     public static void init() {
         try {
@@ -26,9 +28,23 @@ public class Application {
         window.updateContext();
     }
 
+    public static void showAthlete(Athlete a) {
+        window.updateContext(new AthleteCardContext(a));
+    }
+
     public static void addAthlete(Athlete a) {
         try {
             athleteArchive.write(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addCompetition(Competition c) {
+        try {
+            c.id = id;
+            competitionArchive.write(c);
+            id++;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,6 +80,24 @@ public class Application {
     public static Competition[] getCompetitions(short athleteId) {
         try {
             return competitionArchive.search(athleteId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Competition[] getCompetitions(Discipline d) {
+        try {
+            return competitionArchive.search(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Competition[] getCompetitions(int l, int r) {
+        try {
+            return competitionArchive.get(l, r);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

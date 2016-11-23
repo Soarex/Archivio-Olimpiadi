@@ -13,7 +13,7 @@ public class Competition {
         discipline = Discipline.NULL;
     }
 
-    public Competition(Discipline discipline, short athleteId, float score, short id) {
+    public Competition(Discipline discipline, short athleteId, float score) {
         this.athleteId = athleteId;
         this.discipline = discipline;
         this.score = score;
@@ -23,19 +23,19 @@ public class Competition {
         return discipline.getName() + " " + score + " " + athleteId;
     }
 
-    public static final int SIZE = 4 + 4 + 2 + 4;
+    public static final int SIZE = 4 + 4 + 2 + 2;
 
     public static void write(RandomAccessFile file, Competition competition) throws IOException {
         Discipline.write(file, competition.discipline);
         file.writeFloat(competition.score);
         file.writeShort(competition.athleteId);
-        file.writeInt(competition.id);
+        file.writeShort(competition.id);
     }
 
     public static Competition read(RandomAccessFile file) throws IOException {
         Competition res = new Competition();
         res.discipline = Discipline.read(file);
-        res.score = file.readShort();
+        res.score = file.readFloat();
         res.athleteId = file.readShort();
         res.id = file.readShort();
         return res;

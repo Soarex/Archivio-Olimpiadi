@@ -3,21 +3,22 @@ package main.archive;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Athlete {
     public String name, surname;
-    public Date date;
+    public LocalDate date;
     public short id;
     public Nation nation;
 
     public Athlete() {
         nation = Nation.NULL;
-        date = new Date();
+        date = LocalDate.parse("1999-01-01");
     }
 
-    public Athlete(String name, String surname, Nation nation, Date date, int id) {
+    public Athlete(String name, String surname, Nation nation, LocalDate date, int id) {
         this.name = name;
         this.surname = surname;
         this.nation = nation;
@@ -26,11 +27,11 @@ public class Athlete {
     }
 
     public String toString() {
-        return name + " " + surname + " " + nation.getName() + " " + date.getDay() + "/" + date.getMonth() + "/" + date.getYear() + " " + id;
+        return name + " " + surname + " " + nation.getName() + " " + date.getDayOfMonth() + "/" + date.getMonth() + "/" + date.getYear() + " " + id;
     }
 
     public String getDate() {
-        return date.getDay() + "/" + date.getMonth() + "/" + date.getYear();
+        return date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
     }
 
     public static final int NAME_LENGHT = 25;
@@ -52,10 +53,10 @@ public class Athlete {
         file.writeChars(buffer.toString());
     }
 
-    private static void writeDate(RandomAccessFile file, Date date) throws IOException {
+    private static void writeDate(RandomAccessFile file, LocalDate date) throws IOException {
         file.writeInt(date.getYear());
-        file.writeInt(date.getMonth());
-        file.writeInt(date.getDay());
+        file.writeInt(date.getMonthValue());
+        file.writeInt(date.getDayOfMonth());
     }
 
     public static Athlete read(RandomAccessFile file) throws IOException {
@@ -78,11 +79,12 @@ public class Athlete {
         return res;
     }
 
-    private static Date readDate(RandomAccessFile file) throws IOException {
-        Date date = new Date();
-        date.setYear(file.readInt());
-        date.setMonth(file.readInt());
-        date.setDate(file.readInt());
-        return date;
+    private static LocalDate readDate(RandomAccessFile file) throws IOException {
+        String res = "";
+        res = res +  String.format("%04d", file.readInt()) + "-";
+        res = res +  String.format("%02d", file.readInt()) + "-";
+        res = res +  String.format("%02d", file.readInt());
+
+        return LocalDate.parse(res);
     }
 }

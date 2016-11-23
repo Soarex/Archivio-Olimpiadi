@@ -106,4 +106,13 @@ public class CompetitionArchive {
 
         return list.toArray(new Competition[0]);
     }
+
+    public Competition[] get(int l, int r) throws IOException, IllegalAccessException, InstantiationException {
+        Short[] arr = disciplineIndex.get(l, r);
+        ArrayList<Competition> list = new ArrayList<>();
+        for(Short s : arr)
+            list.add(read(s));
+
+        return list.toArray(new Competition[0]);
+    }
 }

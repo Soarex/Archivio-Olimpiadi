@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AthleteContext extends JPanel {
-    private int l= 0, r = 0;
+    private int l= 0, r = l + 10;
     private Athlete[] current;
 
     public AthleteContext() {
@@ -79,8 +79,9 @@ public class AthleteContext extends JPanel {
         current = Application.getAthletes(0, 100);
 
         if(current != null)
-        for(Athlete a : current)
-            result.add(getAthleteButton(a));
+            for(int i = l; i < r; i++)
+                if(i < current.length)
+                    result.add(getAthleteButton(current[i]));
 
         center.add(result, BorderLayout.CENTER);
 
@@ -143,9 +144,14 @@ public class AthleteContext extends JPanel {
         WideButton temp = new WideButton("<html><font color = '#555555'>Nome: </font>" + a.name +
                 "<font color = '#555555'>  Cognome: </font>" + a.surname +
                 "<font color = '#555555'>  Data di nascita: </font>" + a.getDate() +
-                "<font color = '#555555'>  Nazione: </font>" + a.nation + "</html>"
+                "<font color = '#555555'>  Nazione: </font>" + a.nation.getName() +
+                "<font color = '#555555'>  Pettorina: </font>" + a.id +  "</html>"
         );
         temp.setIcon(new ImageIcon("res/system/user.png"));
+
+        temp.addActionListener((ActionEvent e) -> {
+            Application.showAthlete(a);
+        });
         return temp;
     }
 

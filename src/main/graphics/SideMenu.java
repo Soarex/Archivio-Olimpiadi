@@ -8,13 +8,15 @@ import javax.swing.*;
 
 public class SideMenu extends JPanel {
     private JPanel currentContext = new AthleteContext();
+    private WideButton button;
+    private WideButton button2;
 
     public SideMenu() {
         super();
         setBackground(StandardColor.BACKGROUND_DARK_COLOR);
 
-        WideButton button = new WideButton("Atleti");
-        WideButton button2 = new WideButton("Gare");
+        button  = new WideButton("Atleti");
+        button2 = new WideButton("Gare");
 
         button.setSelected(true);
         button.setIcon(new ImageIcon("res/system/users.png"));
@@ -38,6 +40,12 @@ public class SideMenu extends JPanel {
 
     public JPanel getSelectedContext() {
         return currentContext;
+    }
+
+    public void setCurrentContext(JPanel context) {
+        button2.setSelected(false);
+        button.setSelected(false);
+        currentContext = context;
     }
 
     public Dimension getPreferredSize() {
