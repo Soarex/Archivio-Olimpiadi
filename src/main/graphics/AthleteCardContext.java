@@ -6,6 +6,7 @@ import main.core.Application;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class AthleteCardContext extends JPanel{
     private Competition[] current;
@@ -17,10 +18,12 @@ public class AthleteCardContext extends JPanel{
 
         JPanel top = new JPanel();
         JPanel center = new JPanel();
+        JPanel bottom = new JPanel();
         JPanel result = new JPanel();
 
         top.setBackground(StandardColor.BACKGROUND_LIGHT_COLOR);
         center.setBackground(StandardColor.BACKGROUND_LIGHT_COLOR);
+        bottom.setBackground(StandardColor.BACKGROUND_DARK_COLOR);
         result.setBackground(StandardColor.BACKGROUND_LIGHT_COLOR);
 
         JLabel label = new JLabel(a.name + " " + a.surname);
@@ -42,8 +45,60 @@ public class AthleteCardContext extends JPanel{
         }
         //center.add(result);
 
+        SimpleButton leftButton = new SimpleButton("");
+        leftButton.setIcon(new ImageIcon("res/system/left-arrow.png"));
+
+        leftButton.addActionListener((ActionEvent e) -> {
+            result.removeAll();
+            l -= 10;
+
+            if(l < 0) l = 0;
+
+            r = l + 10;
+
+            for(int i = l; i < r; i++)
+                if(i < current.length)
+                    result.add(getCompetitionButton(current[i]));
+
+            repaint();
+            revalidate();
+        });
+
+        bottom.add(leftButton);
+
+        SimpleButton removeButton = new SimpleButton("");
+        removeButton.setIcon(new ImageIcon("res/system/error.png"));
+
+        removeButton.addActionListener((ActionEvent e) -> {
+            int res = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare l'atleta?", "Confirm",  JOptionPane.YES_NO_OPTION);
+            if(res == JOptionPane.YES_OPTION) Application.deleteAthlete(a.id);
+            Application.changeContext(new AthleteContext());
+        });
+
+        bottom.add(removeButton);
+
+
+        SimpleButton rightButton = new SimpleButton("");
+        rightButton.setIcon(new ImageIcon("res/system/right-arrow.png"));
+
+        rightButton.addActionListener((ActionEvent e) -> {
+            result.removeAll();
+            l += 10;
+            r = l + 10;
+
+            for(int i = l; i < r; i++)
+                if(i < current.length)
+                    result.add(getCompetitionButton(current[i]));
+
+            repaint();
+            revalidate();
+
+        });
+        bottom.add(rightButton);
+
         add(top, BorderLayout.NORTH);
         add(result, BorderLayout.CENTER);
+        add(bottom, BorderLayout.SOUTH);
     }
 
     private WideButton getCompetitionButton(Competition c) {

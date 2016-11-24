@@ -64,19 +64,25 @@ public class AthleteArchive {
             return null;
     }
 
+    /*
     public void delete() throws IOException {
         file.writeBoolean(false);
     }
+    */
 
-    public void delete(int position) throws IOException {
+    public void delete(int position) throws IOException, IllegalAccessException, InstantiationException {
         if(position >= capacity)
             throw new IOException();
 
         long offset = position * (Athlete.SIZE + 1);
         file.seek(offset);
         file.writeBoolean(false);
+
+        nameIndex.remove((short) position);
+        nationIndex.remove((short) position);
     }
 
+    /*
     public void restore() throws IOException {
         file.writeBoolean(true);
     }
@@ -89,6 +95,7 @@ public class AthleteArchive {
         file.seek(offset);
         file.writeBoolean(true);
     }
+    */
 
     public Athlete[] search(String fullname) throws IOException, IllegalAccessException, InstantiationException {
         Short[] arr = nameIndex.search(fullname);

@@ -4,6 +4,7 @@ import main.archive.*;
 import main.graphics.AdminWindow;
 import main.graphics.AthleteCardContext;
 
+import javax.swing.*;
 import java.util.Date;
 
 public class Application {
@@ -28,6 +29,10 @@ public class Application {
         window.updateContext();
     }
 
+    public static void changeContext(JPanel context) {
+        window.updateContext(context);
+    }
+
     public static void showAthlete(Athlete a) {
         window.updateContext(new AthleteCardContext(a));
     }
@@ -40,11 +45,28 @@ public class Application {
         }
     }
 
+    public static void deleteAthlete(short id) {
+        try {
+            athleteArchive.delete(id);
+            competitionArchive.deletePerAthlete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void addCompetition(Competition c) {
         try {
             c.id = id;
             competitionArchive.write(c);
             id++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteCompetition(short id) {
+        try {
+            competitionArchive.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
         }

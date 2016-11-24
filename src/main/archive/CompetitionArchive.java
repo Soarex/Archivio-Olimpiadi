@@ -1,5 +1,7 @@
 package main.archive;
 
+import main.core.Application;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -63,19 +65,33 @@ public class CompetitionArchive {
             return null;
     }
 
+    /*
     public void delete() throws IOException {
         file.writeBoolean(false);
     }
+    */
 
-    public void delete(int position) throws IOException {
+    public void delete(short position) throws IOException, IllegalAccessException, InstantiationException {
         if(position >= capacity)
             throw new IOException();
 
         long offset = position * (Competition.SIZE + 1);
         file.seek(offset);
         file.writeBoolean(false);
+
+        disciplineIndex.remove(position);
+        athleteIndex.remove(position);
     }
 
+    public void deletePerAthlete(short id) throws IOException, IllegalAccessException, InstantiationException {
+        Competition[] arr = search(id);
+
+        for(Competition c : arr)
+            delete(c.id);
+    }
+
+
+    /*
     public void restore() throws IOException {
         file.writeBoolean(true);
     }
@@ -88,6 +104,7 @@ public class CompetitionArchive {
         file.seek(offset);
         file.writeBoolean(true);
     }
+    */
 
     public Competition[] search(Short athleteId) throws IOException, IllegalAccessException, InstantiationException {
         Short[] arr = athleteIndex.search(athleteId);

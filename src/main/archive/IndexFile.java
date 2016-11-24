@@ -72,8 +72,50 @@ public class IndexFile {
         shift(aus, ++position);
     }
 
-    public void remove(int pointer) throws IOException, IllegalAccessException, InstantiationException {
+    public void remove(short pointer) throws IOException, IllegalAccessException, InstantiationException {
+        file.seek(4);
+        int position = findPosition(pointer);
+        if(position == -1) return;
 
+        if(position == entryCount - 1) {
+            entryCount--;
+            return;
+        }
+
+        Index temp = type.getClass().newInstance();
+        file.seek((entryCount - 1) * temp.getSize() + 4);
+        temp.read(file);
+        shiftBack(temp, entryCount - 2, position);
+        entryCount--;
+        file.seek(0);
+        file.writeInt(entryCount);
+    }
+
+    private int findPosition(short pointer) throws IOException, IllegalAccessException, InstantiationException {
+        int res = 0;
+        Index aus = type.getClass().newInstance();
+        while(res < entryCount && aus.read(file).pointer != pointer)
+            res++;
+
+        if(res == entryCount) return -1;
+        return res;
+    }
+
+    private void shiftBack(Index index, int position, int limit) throws IOException, IllegalAccessException, InstantiationException {
+        if(position == limit){
+            file.seek(position * index.getSize() + 4);
+            index.write(file);
+            return;
+        }
+
+        Index aus = type.getClass().newInstance();
+        file.seek((position) * aus.getSize() + 4);
+
+        aus.read(file);
+        file.seek(position * aus.getSize() + 4);
+        index.write(file);
+
+        shiftBack(aus, --position, limit);
     }
 
     public <T extends Comparable<T>> Short[] search(T key) throws IOException, IllegalAccessException, InstantiationException  {
