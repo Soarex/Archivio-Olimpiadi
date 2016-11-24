@@ -59,6 +59,16 @@ public class Application {
         }
     }
 
+    public static boolean athleteExists(short id) {
+        try {
+            if(athleteArchive.read(id) == null) return false;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void addCompetition(Competition c) {
         try {
             c.id = id;

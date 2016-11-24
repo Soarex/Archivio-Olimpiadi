@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class AddAthleteWindow extends JFrame {
@@ -36,9 +37,18 @@ public class AddAthleteWindow extends JFrame {
             if(n != Nation.NULL)  nationField.add(n.getName());
 
         addButton.addActionListener((ActionEvent e) -> {
-            Application.addAthlete(new Athlete(nameField.getText(), surnameField.getText(), Nation.get(nationField.getSelectedIndex()), LocalDate.parse(dateField.getText()), Integer.parseInt(idField.getText())));
-            JOptionPane.showMessageDialog(null, "Operazione eseguita", "InfoBox", JOptionPane.INFORMATION_MESSAGE);
-            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            try {
+                LocalDate.parse(dateField.getText());
+                if (!Application.athleteExists(Short.parseShort(idField.getText()))) {
+                    Application.addAthlete(new Athlete(nameField.getText(), surnameField.getText(), Nation.get(nationField.getSelectedIndex()), LocalDate.parse(dateField.getText()), Integer.parseInt(idField.getText())));
+                    JOptionPane.showMessageDialog(null, "Operazione eseguita", "InfoBox", JOptionPane.INFORMATION_MESSAGE);
+                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pettorina già esistente", "Errore", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (DateTimeParseException er) {
+                JOptionPane.showMessageDialog(null, "Formato data non corretto (aaaa-mm-gg)", "Errore", JOptionPane.INFORMATION_MESSAGE);
+            }
         });
 
         panel.add(new SimpleLable("Nome: "));
