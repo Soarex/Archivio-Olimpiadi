@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Archivio_Olimpiadi_jar</output-path>
     <root id="archive" name="Archivio Olimpiadi.jar">
       <element id="module-output" name="Archivio Olimpiadi" />
-      <element id="dir-copy" path="$PROJECT_DIR$/data" />
     </root>
   </artifact>
 </component>

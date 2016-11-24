@@ -156,6 +156,11 @@ public class CompetitionContext extends JPanel {
                 "<font color = '#555555'>  Atleta: </font>" + a.name + " " + a.surname + "</html>"
         );
         temp.setIcon(new ImageIcon("res/system/center-alignment.png"));
+
+        temp.addActionListener((ActionEvent e) -> {
+            Application.showCompetition(c);
+        });
+
         return temp;
     }
 

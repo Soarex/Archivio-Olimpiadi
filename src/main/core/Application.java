@@ -3,6 +3,7 @@ package main.core;
 import main.archive.*;
 import main.graphics.AdminWindow;
 import main.graphics.AthleteCardContext;
+import main.graphics.CompetitionCardContext;
 
 import javax.swing.*;
 import java.util.Date;
@@ -35,6 +36,10 @@ public class Application {
 
     public static void showAthlete(Athlete a) {
         window.updateContext(new AthleteCardContext(a));
+    }
+
+    public static void showCompetition(Competition c) {
+        window.updateContext(new CompetitionCardContext(c));
     }
 
     public static void addAthlete(Athlete a) {

@@ -71,8 +71,10 @@ public class AthleteCardContext extends JPanel{
 
         removeButton.addActionListener((ActionEvent e) -> {
             int res = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare l'atleta?", "Confirm",  JOptionPane.YES_NO_OPTION);
-            if(res == JOptionPane.YES_OPTION) Application.deleteAthlete(a.id);
-            Application.changeContext(new AthleteContext());
+            if(res == JOptionPane.YES_OPTION) {
+                Application.deleteAthlete(a.id);
+                Application.changeContext(new AthleteContext());
+            }
         });
 
         bottom.add(removeButton);
